@@ -134,7 +134,7 @@ class StupidBrain():
         ## Check for non desciptors ("Them", "You", "It")
 
         ## Add to a list of { preference, object, certainty }
-        ## preference: "Loves", "Likes", "Hates", "Dislikes"
+        ## preference: "Love", "Like", "Hate", "Dislike"
         ## object: "Valorant", "Jordan", "Python"
         ## certainty: A value which plusses by one everytime mentioned
         ## Be extra careful about Like as it can pop up in unrelated sentences
@@ -154,7 +154,7 @@ class StupidBrain():
 
         ## DON'T USE TILL YOU'VE TESTED HOW MUCH IT LEARNS 
 
-        ## Make a string lists where "Things Chook {preference}: {objects}."
+        ## Make where {"role": "user", "content": "Things I {preference}: {objects}."
         ## Possibly Limit to the top 5 or 10 of each
 
         pass

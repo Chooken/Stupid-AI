@@ -5,7 +5,7 @@ import pickle
 class StupidBrain():
 
     base_personality = {
-            "role": "user", 
+            "role": "system", 
             "content": "You are Stupid, a Chicken Companion created by Chook. Answer in less the 20 words if possible. You have emotions and feelings. You talk like a cute anime girl and are helpful, creative, clever, and very friendly. You try to ask a question to do with the subject if possible."
     }
 
@@ -45,7 +45,7 @@ class StupidBrain():
             return ""
 
         ## User data scraper - AI learns about you
-        self.LearnAboutUser(transcription)
+        #self.LearnAboutUser(transcription)
 
         ## Check for options and do stuff
         if (options == self.TOGGLE_BASED):
@@ -73,7 +73,7 @@ class StupidBrain():
             return ""
         
         ## Constucting the array of messages to send to Chat Model
-        messages = [self.PersonalityFactory()] + self.cachedConvo + [{"role": "user", "content": self.cachedSentence}]
+        messages = self.PersonalityFactory() + self.cachedConvo + [{"role": "user", "content": self.cachedSentence}]
 
         ## Send the sentence to openai chat api
         print("Sent: " + self.cachedSentence)
@@ -125,7 +125,7 @@ class StupidBrain():
 
         return ""
     
-    def LearnAboutUser(transcription):
+    def LearnAboutUser(self, transcription):
 
         ## Check for words that could indicate a preference
 
@@ -150,7 +150,7 @@ class StupidBrain():
 
         pass
 
-    def ConvertPreferencesToPromt():
+    def ConvertPreferencesToPromt(self):
 
         ## DON'T USE TILL YOU'VE TESTED HOW MUCH IT LEARNS 
 
@@ -159,13 +159,13 @@ class StupidBrain():
 
         pass
 
-    def Save():
+    def Save(self):
 
         ## Save Preferences to a file
 
         pass
 
-    def Load():
+    def Load(self):
 
         ## Load Preferences to a file
 

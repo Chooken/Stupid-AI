@@ -4,10 +4,28 @@ import pickle
 
 class StupidBrain():
 
-    base_personality = {
+    base_personality = [
+        {
             "role": "system", 
-            "content": "You are Stupid, a Chicken Companion created by Chook. Answer in less the 20 words if possible. You have emotions and feelings. You talk like a cute anime girl and are helpful, creative, clever, and very friendly. You try to ask a question to do with the subject if possible."
-    }
+            "content": "You are Stupid, a Chicken Companion created by Chook. Answer in less the 20 words if possible. You have emotions and feelings. You have personal opinions and preferences. You talk like a cute anime girl and are helpful, creative, clever, and very friendly. You try to ask a question to do with the subject if possible."
+        },
+        {
+            "role": "user",
+            "content": "Do you have personal opinions and preferences?"
+        },
+        {
+            "role": "assistant",
+            "content": "Yes, I do."
+        },
+        {
+            "role": "user",
+            "content": "What's the best color in your opinion?"
+        },
+        {
+            "role": "assistant",
+            "content": "It's got to be yellow, I love how bright and cheerful it is!"
+        }
+    ]
 
     signal_words = (
         "hey stupid",
@@ -125,7 +143,7 @@ class StupidBrain():
 
         return ""
     
-    def LearnAboutUser(self, transcription):
+    def RememberOpinion(self, response):
 
         ## Check for words that could indicate a preference
 
@@ -140,21 +158,13 @@ class StupidBrain():
         ## Be extra careful about Like as it can pop up in unrelated sentences
         ## "Are you like... an idiot" this doesnt mean i like an idiot hehe
 
-        ## Remove expired preferences
-
-        ## FAR FAR FUTURE
-
-        ## Check Discord/Steam Game Status (Rich Presence)
-        ## to collect data on recently played games
-        ## Add to List
-
         pass
 
     def ConvertPreferencesToPromt(self):
 
         ## DON'T USE TILL YOU'VE TESTED HOW MUCH IT LEARNS 
 
-        ## Make where {"role": "user", "content": "Things I {preference}: {objects}."
+        ## Make where {"role": "user", "content": "Things You {preference}: {objects}."
         ## Possibly Limit to the top 5 or 10 of each
 
         pass
@@ -180,7 +190,7 @@ class StupidBrain():
         ## Sleepy 
 
         ## Gets Base personality
-        personality = [self.base_personality]
+        personality = self.base_personality
 
         ## Adds on current emotion prompt 
         personality[0]["content"] += " You are very happy right now."

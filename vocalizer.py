@@ -1,5 +1,6 @@
 from TTS.api import TTS
 import sounddevice as sd
+import numpy as np
 
 class Vocalizer:
 
@@ -27,4 +28,5 @@ class Vocalizer:
 
         ## Process TTS
         wav = self.tts_engine.tts(sentence)
+        wav = np.multiply(wav, 0.1)
         sd.play(wav, 24000)

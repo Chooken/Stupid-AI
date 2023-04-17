@@ -8,6 +8,7 @@ from sys import platform
 from brain import StupidBrain
 from mic import MicTranscription
 from vocalizer import Vocalizer
+from ChickenRenderer import ChickenRenderer
 
 class Main:
 
@@ -34,6 +35,7 @@ class Main:
         self.mic_transcriptor = MicTranscription()
         self.brain = StupidBrain()
         self.vocalizer = Vocalizer()
+        self.ChickenRenderer = ChickenRenderer(self.sprite_window)
 
         if (platform == "win32"): 
             self.sprite_window.wm_attributes("-transparentcolor", "black")
@@ -41,14 +43,6 @@ class Main:
         if (platform == "darwin"): 
             self.sprite_window.wm_attributes("-transparent", True)
             self.sprite_window.config(bg='systemTransparent')
-        
-        ## DEBUG VISUALS
-        image1 = Image.open("test_waifu_2.png").resize((250,250),Image.LANCZOS)
-        self.testImage = ImageTk.PhotoImage(image1)  
-
-        self.label = ttk.Label(self.sprite_window, image=self.testImage)
-        self.label.config(background='black')
-        self.label.pack()
 
         ## Root elements
         self.toggleBorderValue = tkinter.IntVar()
@@ -70,14 +64,17 @@ class Main:
         self.mic_transcriptor.running = False
 
     def Update(self):
-        ## Update milliseconds since startup
+
+         ## Update milliseconds since startup
         self.ms_since_startup = math.floor((self.ms_since_startup + 1 * self.frametime) % self.startup_ms_max)
 
-        ## DEBUG VISUALS
-        self.label.place(y=math.sin(self.ms_since_startup * 0.001) * 10)
-
+        ## Update the Brain
         reply = self.brain.UpdateSentence(self.mic_transcriptor.result_queue, self.brain.SIGNAL_BASED)
 
+        ## Update the Chicken Visuals
+        self.ChickenRenderer.Update(self.ms_since_startup)
+
+        ## Vocalize the response from Chat Model
         if (reply != ""):
             self.vocalizer.Say(reply)
 

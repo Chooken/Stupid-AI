@@ -1,8 +1,8 @@
-import tkinter 
-from tkinter import ttk
 import math
-from PIL import ImageTk, Image
-from sys import platform
+import sys
+from PyQt6.QtWidgets import QApplication, QMainWindow, QCheckBox
+from PyQt6.QtGui import QCloseEvent
+from PyQt6.QtCore import QTimer
 
 ## Files
 from brain import StupidBrain
@@ -10,63 +10,55 @@ from mic import MicTranscription
 from vocalizer import Vocalizer
 from ChickenRenderer import ChickenRenderer
 
-class Main:
+class Main(QMainWindow):
 
-    fps = 24
-    frametime = math.floor(1000 / fps)
+    FPS = 24
+    FRAMETIME = math.floor(1000 / FPS)
 
     startup_ms_max = math.pi * 2000000
     ms_since_startup = 0
 
     def __init__(self):
-        ## Initialise Main Window (Controls)
-        self.root = tkinter.Tk()
-        self.root.title("Stupid - AI Companion")
-        self.root.geometry("250x250")
+        super(QMainWindow, self).__init__()
 
-        ## Initialise Sprite Window (Bot Window)
-        self.sprite_window = tkinter.Toplevel(self.root)
-        self.sprite_window.title("Stupid - AI Companion")
-        self.sprite_window.geometry("250x300")   
-        self.sprite_window.lift()
-        self.sprite_window.wm_attributes("-topmost", True)
+        ## Initialise Main Window (Controls)
+        self.setWindowTitle("Stupid - AI Companion")
+        self.resize(250,250)
+
+        self.ChickenRenderer = ChickenRenderer()
 
         ## Initalising other files/classes
         self.mic_transcriptor = MicTranscription()
         self.brain = StupidBrain()
         self.vocalizer = Vocalizer()
-        self.ChickenRenderer = ChickenRenderer(self.sprite_window)
-
-        if (platform == "win32"): 
-            self.sprite_window.wm_attributes("-transparentcolor", "black")
-            self.sprite_window.config(bg='black')
-        if (platform == "darwin"): 
-            self.sprite_window.wm_attributes("-transparent", True)
-            self.sprite_window.config(bg='systemTransparent')
 
         ## Root elements
-        self.toggleBorderValue = tkinter.IntVar()
-        self.toggleBorder = ttk.Checkbutton(
-            self.root, 
-            text="Toggle Border", 
-            variable=self.toggleBorderValue,
-            command=self.ToggleBorder
-        )
-        self.toggleBorder.pack()
+        self.toggleBorder = QCheckBox("Toggle Border", self)
+        self.toggleBorder.stateChanged.connect(self.ToggleBorder)
 
         ## Initialise Update Loop
-        self.sprite_window.after(self.frametime, self.Update)
-        
-        ## Start Main Loop
-        self.root.mainloop()
+        self.timer = QTimer(self)
+        self.timer.setSingleShot(False)
+        self.timer.setInterval(self.FRAMETIME)
+        self.timer.timeout.connect(self.Update)
+        self.timer.start()
 
+        self.show()
+        self.ChickenRenderer.show()
+
+    def End(self):
         ## Tell the threads to stop
         self.mic_transcriptor.running = False
+        pass
+
+    def closeEvent(self, a0: QCloseEvent) -> None:
+        self.ChickenRenderer.close()
+        return super().closeEvent(a0)
 
     def Update(self):
 
          ## Update milliseconds since startup
-        self.ms_since_startup = math.floor((self.ms_since_startup + 1 * self.frametime) % self.startup_ms_max)
+        self.ms_since_startup = math.floor((self.ms_since_startup + 1 * self.FRAMETIME) % self.startup_ms_max)
 
         ## Update the Brain
         reply = self.brain.UpdateSentence(self.mic_transcriptor.result_queue, self.brain.SIGNAL_BASED)
@@ -78,15 +70,19 @@ class Main:
         if (reply != ""):
             self.vocalizer.Say(reply)
 
-        ## Queue next update frame
-        self.sprite_window.after(self.frametime, self.Update)
-
-    def ToggleBorder(self):
+    def ToggleBorder(self, state):
 
         ## Sets Border of the window invisible or not
-        if (self.toggleBorderValue.get() == 1):
-            self.sprite_window.overrideredirect(True)
+        if (state == 2):
+            self.ChickenRenderer.SetBorderless(True)
         else:
-            self.sprite_window.overrideredirect(False)
+            self.ChickenRenderer.SetBorderless(False)
 
-Main()
+app = QApplication([])
+root = Main()
+
+app.exec()
+
+root.End()
+
+sys.exit()

@@ -35,10 +35,10 @@ class StupidBrain():
     cachedConvo = []
     cachedSentence = ""
 
-    def __init__(self):
+    def __init__(self) -> None:
         openai.api_key = "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"
 
-    def UpdateSentence(self, result_queue, options):
+    def UpdateSentence(self, result_queue: queue, options: int) -> str:
 
         ## Try get any results from transriber without blocking main thread
         try:
@@ -98,7 +98,7 @@ class StupidBrain():
         return response['choices'][0]['message']['content']
 
 
-    def CacheConvo(self, new_sentence, response):
+    def CacheConvo(self, new_sentence: str, response: str) -> None:
 
         ## Appending the new question and response to memory
         self.cachedConvo.append({"role": "user", "content": new_sentence})
@@ -109,7 +109,7 @@ class StupidBrain():
         if (len(self.cachedConvo) > 4):
             self.cachedConvo = self.cachedConvo[-4:]
 
-    def CheckForSignalWords(self, transcription):
+    def CheckForSignalWords(self, transcription: str) -> str:
 
         ## OLD only looks at start of speech
         ## if transcription.startswith(self.signal_words):
@@ -127,7 +127,7 @@ class StupidBrain():
 
         return ""
     
-    def RememberOpinion(self, response):
+    def RememberOpinion(self, response: str):
 
         ## Check for words that could indicate a preference
 
@@ -165,7 +165,7 @@ class StupidBrain():
 
         pass
 
-    def PersonalityFactory(self):
+    def PersonalityFactory(self) -> list[dict[str,str]]:
 
         ## Uses Emotions to tell chat gpt how to respond
         ## 

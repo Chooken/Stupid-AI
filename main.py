@@ -5,9 +5,9 @@ from PyQt6.QtGui import QCloseEvent
 from PyQt6.QtCore import QTimer
 
 ## Files
-from brain import StupidBrain
-from mic import MicTranscription
-from vocalizer import Vocalizer
+from Brain import StupidBrain
+from Mic import MicTranscription
+from Vocalizer import Vocalizer
 from ChickenRenderer import ChickenRenderer
 
 class Main(QMainWindow):
@@ -18,7 +18,7 @@ class Main(QMainWindow):
     startup_ms_max = math.pi * 2000000
     ms_since_startup = 0
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(QMainWindow, self).__init__()
 
         ## Initialise Main Window (Controls)
@@ -49,13 +49,12 @@ class Main(QMainWindow):
     def End(self):
         ## Tell the threads to stop
         self.mic_transcriptor.running = False
-        pass
 
-    def closeEvent(self, a0: QCloseEvent) -> None:
+    def closeEvent(self, event: QCloseEvent) -> None:
         self.ChickenRenderer.close()
-        return super().closeEvent(a0)
+        return super().closeEvent(event)
 
-    def Update(self):
+    def Update(self) -> None:
 
          ## Update milliseconds since startup
         self.ms_since_startup = math.floor((self.ms_since_startup + 1 * self.FRAMETIME) % self.startup_ms_max)
@@ -70,7 +69,7 @@ class Main(QMainWindow):
         if (reply != ""):
             self.vocalizer.Say(reply)
 
-    def ToggleBorder(self, state):
+    def ToggleBorder(self, state) -> None:
 
         ## Sets Border of the window invisible or not
         if (state == 2):
@@ -78,11 +77,13 @@ class Main(QMainWindow):
         else:
             self.ChickenRenderer.SetBorderless(False)
 
+## Application Initialisation
 app = QApplication([])
 root = Main()
 
+## Starts Loop
 app.exec()
 
+## Exits Threads and Application
 root.End()
-
 sys.exit()

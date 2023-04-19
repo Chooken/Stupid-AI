@@ -10,7 +10,7 @@ class MicTranscription():
 
     running = True
 
-    def __init__(self):
+    def __init__(self) -> None:
 
         ## Init Model Type
         self.audio_model = whisper.load_model("tiny.en")
@@ -23,7 +23,7 @@ class MicTranscription():
         threading.Thread(target=self.record_audio).start()
         threading.Thread(target=self.transcribe_forever).start()
         
-    def record_audio(self):
+    def record_audio(self) -> None:
 
         #load the speech recognizer and set the initial energy threshold and pause threshold
         r = sr.Recognizer()
@@ -54,7 +54,7 @@ class MicTranscription():
                 self.audio_queue.put_nowait(audio_data)
 
 
-    def transcribe_forever(self):
+    def transcribe_forever(self) -> None:
         while True:
 
             ## Stop Thread when application is closed

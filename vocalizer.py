@@ -4,7 +4,7 @@ import numpy as np
 
 class Vocalizer:
 
-    def __init__(self):
+    def __init__(self) -> None:
 
         ## Very Natural but can take extremely long time to process GPU is must have
         #self.tts_engine = TTS("tts_models/en/ek1/tacotron2", gpu=True)
@@ -20,7 +20,7 @@ class Vocalizer:
 
         self.Say("Stupid has booted.")
 
-    def Say(self, sentence):
+    def Say(self, sentence: str) -> None:
 
         ## Used for YourTSS Model
         # wav = self.tts_engine.tts(sentence, speaker=self.tts_engine.speakers[2], language="en")

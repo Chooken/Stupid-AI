@@ -19,7 +19,7 @@ class ChickenRenderer(QGraphicsView):
         self.setRenderHints(QPainter.RenderHint.Antialiasing | QPainter.RenderHint.SmoothPixmapTransform)
 
         ## Loading and Placing Images
-        self.body_pixmap = self.LoadPixmap("text_ercle", 250, 250)
+        self.body_pixmap = self.LoadPixmap("test_ercle", 250, 250)
         self.body = self.canvas.addPixmap(self.body_pixmap)
         self.body.setPos(10, self.height() - self.body.boundingRect().height() - 10)
 

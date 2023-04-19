@@ -1,6 +1,6 @@
 import math
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QCheckBox 
+from PyQt6.QtWidgets import QApplication, QMainWindow, QCheckBox, QComboBox, QWidget, QVBoxLayout
 from PyQt6.QtGui import QCloseEvent
 from PyQt6.QtCore import QTimer
 
@@ -33,13 +33,17 @@ class Main(QMainWindow):
         self.vocalizer = Vocalizer()
 
         ## Root elements
-        self.toggleBorder = QCheckBox("Toggle Border", self)
-        self.toggleBorder.stateChanged.connect(self.ToggleBorder)
-        self.toggleBorder.setGeometry(10,0,100,20)
+        self.windowState = QComboBox()
+        self.windowState.addItems(["Moveable", "Desktop", "Fullscreen"])
+        self.windowState.currentIndexChanged.connect( self.ChickenRenderer.setState )
 
-        self.toggleFullscreen = QCheckBox("Toggle Fullscreen", self)
-        self.toggleFullscreen.stateChanged.connect(self.ToggleFullscreen)
-        self.toggleFullscreen.setGeometry(10,30,100,20)
+        optionsLayout = QVBoxLayout()
+        optionsLayout.addWidget(self.windowState)
+
+        self.options = QWidget()
+        self.options.setLayout(optionsLayout)
+
+        self.setCentralWidget(self.options)
 
         ## Initialise Update Loop
         self.timer = QTimer(self)

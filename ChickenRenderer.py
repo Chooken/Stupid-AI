@@ -5,6 +5,9 @@ import math
 
 class ChickenRenderer(QGraphicsView):
 
+    borderless = False
+    fullscreen = False
+
     def __init__(self) -> None:
 
         ## Graphics Setup
@@ -15,6 +18,7 @@ class ChickenRenderer(QGraphicsView):
         self.setWindowTitle("Stupid - AI Companion")
         self.resize(500,500)
         self.setStyleSheet("background: transparent")
+        self.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setRenderHints(QPainter.RenderHint.Antialiasing | QPainter.RenderHint.SmoothPixmapTransform)
 
@@ -51,32 +55,49 @@ class ChickenRenderer(QGraphicsView):
     def SinPos(self, ms_since_startup: int, period_in_seconds: float, offset_in_seconds: float, magnitude: float) -> float:
         return math.sin(((ms_since_startup - (offset_in_seconds * 1000)) * 0.001) / period_in_seconds * 2) * magnitude
 
-    def SetBorderless(self, state: int) -> None:
+    def SetBorderless(self, state: bool) -> None:
 
+        self.borderless = state
+
+        ## PLEASE REFACTOR SO THAT YOU PICK MODE FROM DROPDOWN
+        ## MOVEABLE DESKTOP FULLSCREEN
         if (state):
             self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.WindowTransparentForInput | Qt.WindowType.NoDropShadowWindowHint)
+            if (not self.fullscreen):
+                self.showMaximized()
+            else:
+                self.showFullScreen
+        else:
+            if (not self.fullscreen):
+                self.resize(500,500)
+            else:
+                self.showFullScreen
+            self.setWindowFlag(Qt.WindowType.FramelessWindowHint, False)
+            self.setWindowFlag(Qt.WindowType.WindowTransparentForInput, False)           
+
+        self.RefreshSpritePosition()
+        self.show()
+
+    def SetFullscreen(self, state: bool) -> None:
+
+        self.fullscreen = state
+
+        if (state):
+            self.showFullScreen()
+        elif (self.borderless):
             self.showMaximized()
-
-            self.body.setPos(10, self.height() - self.body.boundingRect().height() - 10)
-            self.face.setPos(10, self.height() - self.face.boundingRect().height() - 10)
-
-            ## Setting SceneRect to fixed position
-            rect = QRectF(self.rect())
-            self.fitInView(rect)
-            self.setSceneRect(rect)
-
-            self.show()
         else:
             self.resize(500,500)
-            self.setWindowFlag(Qt.WindowType.FramelessWindowHint, False)
-            self.setWindowFlag(Qt.WindowType.WindowTransparentForInput, False)
 
-            self.body.setPos(10, self.height() - self.body.boundingRect().height() - 10)
-            self.face.setPos(10, self.height() - self.face.boundingRect().height() - 10)
+        self.RefreshSpritePosition()
 
-            ## Setting SceneRect to fixed position
-            rect = QRectF(self.rect())
-            self.fitInView(rect)
-            self.setSceneRect(rect)
+    def RefreshSpritePosition(self) -> None:
+        
+        self.body.setPos(10, self.height() - self.body.boundingRect().height() - 10)
+        self.face.setPos(10, self.height() - self.face.boundingRect().height() - 10)
 
-            self.show()
+        ## Setting SceneRect to fixed position
+        rect = QRectF(self.rect())
+        self.fitInView(rect)
+        self.setSceneRect(rect)
+            

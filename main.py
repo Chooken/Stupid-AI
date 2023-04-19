@@ -1,6 +1,6 @@
 import math
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QCheckBox
+from PyQt6.QtWidgets import QApplication, QMainWindow, QCheckBox 
 from PyQt6.QtGui import QCloseEvent
 from PyQt6.QtCore import QTimer
 
@@ -35,6 +35,11 @@ class Main(QMainWindow):
         ## Root elements
         self.toggleBorder = QCheckBox("Toggle Border", self)
         self.toggleBorder.stateChanged.connect(self.ToggleBorder)
+        self.toggleBorder.setGeometry(10,0,100,20)
+
+        self.toggleFullscreen = QCheckBox("Toggle Fullscreen", self)
+        self.toggleFullscreen.stateChanged.connect(self.ToggleFullscreen)
+        self.toggleFullscreen.setGeometry(10,30,100,20)
 
         ## Initialise Update Loop
         self.timer = QTimer(self)
@@ -76,6 +81,14 @@ class Main(QMainWindow):
             self.ChickenRenderer.SetBorderless(True)
         else:
             self.ChickenRenderer.SetBorderless(False)
+
+    def ToggleFullscreen(self, state) -> None:
+
+        ## Sets Border of the window invisible or not
+        if (state == 2):
+            self.ChickenRenderer.SetFullscreen(True)
+        else:
+            self.ChickenRenderer.SetFullscreen(False)
 
 ## Application Initialisation
 app = QApplication([])

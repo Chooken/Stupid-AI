@@ -12,7 +12,7 @@ class ChickenRenderer(QGraphicsView):
         super(QGraphicsView, self).__init__(self.canvas, None)
 
         ## Window Setup
-        self.setWindowTitle("Stupid 2 - AI Companion")
+        self.setWindowTitle("Stupid - AI Companion")
         self.resize(500,500)
         self.setStyleSheet("background: transparent")
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
@@ -54,7 +54,7 @@ class ChickenRenderer(QGraphicsView):
     def SetBorderless(self, state: int) -> None:
 
         if (state):
-            self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.WindowTransparentForInput)
+            self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.WindowTransparentForInput | Qt.WindowType.NoDropShadowWindowHint)
             self.showMaximized()
 
             self.body.setPos(10, self.height() - self.body.boundingRect().height() - 10)

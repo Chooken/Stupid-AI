@@ -78,22 +78,6 @@ class Main(QMainWindow):
         if (reply != ""):
             self.vocalizer.Say(reply)
 
-    def ToggleBorder(self, state) -> None:
-
-        ## Sets Border of the window invisible or not
-        if (state == 2):
-            self.ChickenRenderer.SetBorderless(True)
-        else:
-            self.ChickenRenderer.SetBorderless(False)
-
-    def ToggleFullscreen(self, state) -> None:
-
-        ## Sets Border of the window invisible or not
-        if (state == 2):
-            self.ChickenRenderer.SetFullscreen(True)
-        else:
-            self.ChickenRenderer.SetFullscreen(False)
-
 ## Application Initialisation
 app = QApplication([])
 root = Main()

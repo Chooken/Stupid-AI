@@ -33,12 +33,17 @@ class Main(QMainWindow):
         self.vocalizer = Vocalizer()
 
         ## Root elements
-        self.windowState = QComboBox()
-        self.windowState.addItems(["Moveable", "Desktop", "Fullscreen"])
-        self.windowState.currentIndexChanged.connect( self.ChickenRenderer.setState )
+        self.window_state = QComboBox()
+        self.window_state.addItems(["Moveable", "Desktop", "Fullscreen"])
+        self.window_state.currentIndexChanged.connect( self.ChickenRenderer.setState )
+
+        self.listen_state = QComboBox()
+        self.listen_state.addItems(["Toggle", "Keyword", "Always"])
+        #self.listen_state.currentIndexChanged.connect( self.ChickenRenderer.setState )
 
         optionsLayout = QVBoxLayout()
-        optionsLayout.addWidget(self.windowState)
+        optionsLayout.addWidget(self.window_state)
+        optionsLayout.addWidget(self.listen_state)
 
         self.options = QWidget()
         self.options.setLayout(optionsLayout)
@@ -69,7 +74,7 @@ class Main(QMainWindow):
         self.ms_since_startup = math.floor((self.ms_since_startup + 1 * self.FRAMETIME) % self.startup_ms_max)
 
         ## Update the Brain
-        reply = self.brain.UpdateSentence(self.mic_transcriptor.result_queue, self.brain.SIGNAL_BASED)
+        reply = self.brain.UpdateSentence(self.mic_transcriptor.result_queue, self.listen_state.currentIndex())
 
         ## Update the Chicken Visuals
         self.ChickenRenderer.Update(self.ms_since_startup)

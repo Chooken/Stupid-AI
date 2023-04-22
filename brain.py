@@ -1,6 +1,7 @@
 import queue
 import openai
 import pickle
+import keyboard
 
 class StupidBrain():
 
@@ -28,9 +29,9 @@ class StupidBrain():
         "hey, stephen"
     )
 
+    TOGGLE_BASED = 0
     SIGNAL_BASED = 1
-    TOGGLE_BASED = 2
-    CONTINUOUS = 3
+    CONTINUOUS = 2
 
     cachedConvo = []
     cachedSentence = ""
@@ -51,7 +52,8 @@ class StupidBrain():
 
         ## Check for options and do stuff
         if (options == self.TOGGLE_BASED):
-            return ""
+            if (not keyboard.is_pressed("n")):
+                return ""
         elif (options == self.SIGNAL_BASED):
             transcription = self.CheckForSignalWords(transcription)
             if (self.cachedSentence == "" and transcription == ""):

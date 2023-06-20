@@ -37,7 +37,7 @@ class StupidBrain():
     cachedSentence = ""
 
     def __init__(self) -> None:
-        openai.api_key = "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"
+        openai.api_key = "Insert Key Here"
 
     def UpdateSentence(self, result_queue: queue, options: int) -> str:
 
